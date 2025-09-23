@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>やまPay チャージ</title>
+<style>
+:root {
+  --blue:#0aa0ff;
+  --blue-dark:#008edd;
+  --bg:#ffffff;
+  --card:#dff5ff;
+  font-family: "Hiragino Kaku Gothic ProN", Meiryo, "Noto Sans JP", sans-serif;
+}
+
+body {
+  margin:0;
+  background:var(--bg);
+  color:var(--blue-dark);
+  display:flex;
+  justify-content:center;
+  padding:24px;
+}
+
+.frame { width:400px; max-width:94vw; }
+.brand { text-align:center; font-size:56px; font-weight:700; color:var(--blue-dark); margin:18px 0; }
+.mascot-area { display: flex; align-items: flex-start; gap: 12px; position: relative; }
+.mascot { width: 150px; }
+.balloon3-right-btm { position: absolute; top: 20px; left: 160px; display: inline-block; padding: 15px; width: 200px; line-height: 20px; text-align: center; color: #fff; font-size: 20px; font-weight: bold; background: #008edd; border-radius: 50%; box-sizing: border-box; }
+.balloon3-right-btm:before { content: ""; position: absolute; top: 50%; left: -25px; margin-top: -15px; border: 15px solid transparent; border-right: 15px solid #008edd; }
+
+.welcome { text-align:center; font-size:24px; margin-bottom:12px; color: var(--blue-dark); font-weight:600; }
+.balance-wrap { background:var(--card); border:6px solid var(--blue); border-radius:24px; padding:16px 18px; text-align:center; margin-bottom:20px; min-height:120px; display:flex; flex-direction:column; justify-content:center; }
+.small-label { font-size:18px; }
+.balance { font-size:36px; font-weight:700; }
+.balance .unit { font-size:20px; margin-left:8px; }
+
+.charge-box { display:flex; flex-direction:column; align-items:center; gap:12px; margin-top:16px; }
+.charge-box input { padding:8px 12px; font-size:18px; width:300px; text-align:center; border: 2px solid #0aa0ff; }
+.charge-box button { padding:10px 20px; font-size:18px; cursor:pointer; background:#0aa0ff; color:#fff; border:none; border-radius:8px; }
+.charge-box .back-btn { padding: 6px 16px; font-size: 16px; cursor: pointer; background: #cce6ff; color: #008edd; border: none; border-radius: 6px; margin-top: 5px; }
+
+/* モーダル */
+.modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.4); display: flex; justify-content: center; align-items: center; z-index: 1000; }
+.modal-content { background: #fff; padding: 24px 32px; border-radius: 12px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+.modal-buttons { margin-top: 16px; display: flex; justify-content: space-around; }
+.modal-buttons button { padding: 8px 20px; font-size: 16px; border-radius: 6px; border: none; cursor: pointer; }
+#modalYes { background: #0aa0ff; color: #fff; }
+#modalNo { background: #ccc; color: #333; }
+
+</style>
+</head>
+<body>
+<div class="frame">
+  <div class="brand">やまPay</div>
+  <div id="welcome" class="welcome">ようこそ<span id="username"></span>さん</div>
+
+  <div class="balance-wrap">
+    <div class="small-label">やま残高</div>
+    <div class="balance" id="balance">0<span class="unit">やま</span></div>
+  </div>
+
+  <div class="charge-box">
+    <input type="number" id="chargeAmount" placeholder="チャージするやま" min="1" step="1">
+    <button id="btnCharge">チャージする</button>
+    <button id="btnBack" type="button" class="back-btn">戻る</button>
+  </div>
+  
+  <div class="mascot-area">
+   <img class="mascot" src="yama_wallet.png" alt="やまのマスコット" />
+    <div class="balloon3-right-btm">
+      <p>今日はパーっと<br>いっちゃう？</p>
+     </div>
+   </div>
+   
+  <div id="confirmModal" class="modal">
+  <div class="modal-content">
+    <p>高山の承認を得ましたか？</p>
+    <div class="modal-buttons">
+      <button id="modalYes">はい</button>
+      <button id="modalNo">いいえ</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+const modal = document.getElementById("confirmModal");
+const btnCharge = document.getElementById("btnCharge");
+const modalYes = document.getElementById("modalYes");
+const modalNo = document.getElementById("modalNo");
+const inputEl = document.getElementById("chargeAmount");
+const params = new URLSearchParams(window.location.search);
+const username = params.get("user");
+document.getElementById("username").textContent = username;
+const balanceEl = document.getElementById("balance");
+
+// ページ読み込み時はダイアログ非表示
+modal.style.display = "none";
+
+// 残高取得
+async function fetchBalance() {
+  try {
+    const res = await fetch(`https://brown-direction-remix-mary.trycloudflare.com/api/wallets/${username}/balance`);
+    if(!res.ok) throw new Error(res.status);
+    const data = await res.json();
+    balanceEl.innerHTML = Number(data.balance).toLocaleString() + '<span class="unit">やま</span>';
+  } catch(err) {
+    console.error(err);
+    balanceEl.textContent = "取得できません";
+  }
+}
+fetchBalance();
+
+// 戻るボタン
+document.getElementById("btnBack").addEventListener("click", () => {
+  window.location.href = `yamapay_ver3.html?user=${encodeURIComponent(username)}`;
+});
+
+// チャージボタン → ダイアログ表示
+btnCharge.addEventListener("click", () => {
+  const value = inputEl.value.trim();
+  const amount = Number(value);
+
+  // 数字チェック
+  if(!/^\d+$/.test(value) || amount <= 0){
+    alert("正しいチャージ金額を入力してください（1以上の整数）");
+    inputEl.value = "";
+    return;
+  }
+
+  modal.style.display = "flex";
+});
+
+// 「はい」でチャージ処理
+modalYes.addEventListener("click", async () => {
+  modal.style.display = "none";
+  const amount = Number(inputEl.value);
+
+  try {
+    const res = await fetch(`https://brown-direction-remix-mary.trycloudflare.com/api/wallets/${username}/charge`, {
+      method:"POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({amount:amount, description:"チャージテスト"})
+    });
+    if(!res.ok) throw new Error(res.status);
+    const data = await res.json();
+
+    if(data.balanceAfter !== undefined){
+      alert(`${amount}やまをチャージしました`);
+      balanceEl.innerHTML = Number(data.balanceAfter).toLocaleString() + '<span class="unit">やま</span>';
+      inputEl.value = "";
+    } else {
+      alert("チャージに失敗しました");
+    }
+  } catch(err) {
+    console.error(err);
+    alert("チャージに失敗しました");
+  }
+});
+
+// 「いいえ」でダイアログを閉じる
+modalNo.addEventListener("click", () => {
+  modal.style.display = "none";
+});
+
+// 吹き出し用メッセージ
+const messages = [
+ "チャージするよ",
+ "何やまチャージする？",
+ "何やまになるかな？",
+ "やまをチャージできるよ"
+];
+
+function getRandomMessage() {
+ return messages[Math.floor(Math.random() * messages.length)];
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const balloon = document.querySelector(".balloon3-right-btm p");
+  balloon.innerHTML = getRandomMessage();
+});
+
+// Enterキーでもチャージボタン押下と同じ動作
+inputEl.addEventListener("keydown", e => {
+  if(e.key === "Enter") btnCharge.click();
+});
+</script>
+</body>
+</html>
