@@ -163,11 +163,16 @@ body {
   </div>
   
   <div class="mascot-area">
-    <img class="mascot" src="yama_pay.png" alt="やまのマスコット" />
+    <img id="mascotImg" class="mascot" src="yama_pay.png" alt="やまのマスコット" />
     <div class="balloon3-right-btm">
-      <p>今日はパーっと<br>いっちゃう？</p>
+      <p id="balloonMsg">今日はパーっと<br>いっちゃう？</p>
     </div>
   </div>
+
+  <!-- 音声ファイル -->
+  <audio id="paySound" src="やまペイ.mp3" preload="auto"></audio>
+  <audio id="failSound" src="残高不足です.mp3" preload="auto"></audio>
+
 </div>
 
 <script>
@@ -179,6 +184,24 @@ const balanceEl = document.getElementById("balance");
 const inputEl = document.getElementById("payAmount"); 
 const btnPay = document.getElementById("btnPay");     
 const btnBack = document.getElementById("btnBack"); 
+const mascot = document.getElementById("mascotImg");
+const balloon = document.getElementById("balloonMsg");
+
+const messages = [
+ "やまを払ってお菓子をゲット！",
+ "何やま支払いする？",
+ "無理のないお支払いを！"
+];
+
+const failMessages = [
+ "残高が足りません！",
+ "もう少しやまが必要です！",
+ "お支払いできません…"
+];
+
+function getRandomMessage(list) {
+ return list[Math.floor(Math.random() * list.length)];
+}
 
 // 残高取得
 async function fetchBalance() {
@@ -209,15 +232,28 @@ btnPay.addEventListener("click", async () => {
       headers: {"Content-Type":"application/json"},
       body: JSON.stringify({amount:amount, description:"支払い"})
     });
-    if(!res.ok) throw new Error(res.status);
+    // if(!res.ok) throw new Error(res.status);
     const data = await res.json();
 
-    if(data.balanceAfter !== undefined){
+    const paySound = document.getElementById("paySound");
+    const failSound = document.getElementById("failSound");
+
+    if(data.detail !== "Insufficient balance"){
+      // 支払い成功
+      paySound.currentTime = 0;
+      paySound.play();
       alert(`${amount}やまを支払いました`);
       balanceEl.innerHTML = Number(data.balanceAfter).toLocaleString() + '<span class="unit">やま</span>';
-      inputEl.value = ""; // 入力欄をクリア
+      inputEl.value = ""; 
+      mascot.src = "yama_pay.png"; // 通常画像
+      balloon.innerHTML = getRandomMessage(messages);
     } else {
-      alert("支払いに失敗しました");
+      // 残高不足
+      failSound.currentTime = 0;
+      failSound.play();
+      alert("残高不足です");
+      mascot.src = "pay_sad.png"; // 悲しい画像
+      balloon.innerHTML = getRandomMessage(failMessages);
     }
   } catch(err) {
     console.error(err);
@@ -225,18 +261,9 @@ btnPay.addEventListener("click", async () => {
   }
 });
 
-// 吹き出し用メッセージ
-const messages = [
- "やまを払ってお菓子をゲット！",
- "何やま支払いする？",
- "無理のないお支払いを！"
-];
-function getRandomMessage() {
- return messages[Math.floor(Math.random() * messages.length)];
-}
+// 初回吹き出し
 document.addEventListener("DOMContentLoaded", () => {
-  const balloon = document.querySelector(".balloon3-right-btm p");
-  balloon.innerHTML = getRandomMessage();
+  balloon.innerHTML = getRandomMessage(messages);
 });
 
 // Enterキーでも支払い可能に
