@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>やまPay ログイン</title>
+  <style>
+    body { display:flex; justify-content:center; align-items:center; height:100vh; font-family:sans-serif; }
+    .login-box { text-align:center; padding:24px; border:2px solid #0aa0ff; border-radius:16px; }
+    input { padding:8px 12px; font-size:18px; margin-bottom:12px; width:200px; }
+    button { padding:10px 20px; font-size:18px; cursor:pointer; background:#0aa0ff; color:#fff; border:none; border-radius:8px; }
+
+    /* タイトルの色変更 */
+    h1 { 
+      color: #0aa0ff; 
+    }
+  </style>
+</head>
+<body>
+  <div class="login-box">
+    <h1>やまPay ログイン</h1>
+    <input type="text" id="username" placeholder="ユーザー名" value=""><br>
+    <button id="btnLogin">ログイン</button>
+  </div>
+
+  <script>
+    document.getElementById("btnLogin").addEventListener("click", () => {
+      const username = document.getElementById("username").value.trim();
+      if(username === "") { alert("ユーザー名を入力してください"); return; }
+      window.location.href = "yamapay_ver3.html?user=" + encodeURIComponent(username);
+    });
+  </script>
+</body>
+</html>
