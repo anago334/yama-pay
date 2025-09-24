@@ -1,275 +1,292 @@
 <!doctype html>
 <html lang="ja">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>やまPay 支払い</title>
-<style>
-:root {
-  --blue:#0aa0ff;
-  --blue-dark:#008edd;
-  --bg:#ffffff;
-  --card:#dff5ff;
-  font-family: "Hiragino Kaku Gothic ProN", Meiryo, "Noto Sans JP", sans-serif;
-}
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>やまPay 支払い</title>
+  <style>
+    :root {
+      --blue: #0aa0ff;
+      --blue-dark: #008edd;
+      --bg: #ffffff;
+      --card: #dff5ff;
+      font-family: "Hiragino Kaku Gothic ProN", Meiryo, "Noto Sans JP", sans-serif;
+    }
 
-body {
-  margin:0;
-  background:var(--bg);
-  color:var(--blue-dark);
-  display:flex;
-  justify-content:center;
-  padding:24px;
-}
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--blue-dark);
+      display: flex;
+      justify-content: center;
+      padding: 24px;
+    }
 
-.frame {
-  width:400px;
-  max-width:94vw;
-}
+    .frame {
+      width: 400px;
+      max-width: 94vw;
+    }
 
-.brand {
-  text-align:center;
-  font-size:56px;
-  font-weight:700;
-  color:var(--blue-dark);
-  margin:18px 0;
-}
+    .brand {
+      text-align: center;
+      font-size: 56px;
+      font-weight: 700;
+      color: var(--blue-dark);
+      margin: 18px 0;
+    }
 
-.mascot-area {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  position: relative;
-}
+    .welcome {
+      text-align: center;
+      font-size: 24px;
+      margin-bottom: 12px;
+      color: var(--blue-dark);
+      font-weight: 600;
+    }
 
-.mascot {
-  width: 150px;
-}
+    .balance-wrap {
+      background: var(--card);
+      border: 6px solid var(--blue);
+      border-radius: 24px;
+      padding: 16px 18px;
+      text-align: center;
+      margin-bottom: 20px;
+      min-height: 120px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
 
-.balloon3-right-btm {
-  position: absolute;
-  top: 20px;
-  left: 160px;
-  display: inline-block;
-  padding: 15px;
-  width: 200px;
-  line-height: 20px;
-  text-align: center;
-  color: #fff;
-  font-size: 20px;
-  font-weight: bold;
-  background: #008edd;
-  border-radius: 50%;
-  box-sizing: border-box;
-}
+    .small-label {
+      font-size: 18px;
+    }
 
-.balloon3-right-btm:before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: -25px;
-  margin-top: -15px;
-  border: 15px solid transparent;
-  border-right: 15px solid #008edd;
-}
+    .balance {
+      font-size: 36px;
+      font-weight: 700;
+    }
 
-.welcome {
-  text-align:center;
-  font-size:24px;
-  margin-bottom:12px;
-  color: var(--blue-dark);
-  font-weight:600;
-}
+    .balance .unit {
+      font-size: 18px;
+      margin-left: 6px;
+    }
 
-.balance-wrap {
-  background:var(--card);
-  border:6px solid var(--blue);
-  border-radius:24px;
-  padding:16px 18px;
-  text-align:center;
-  margin-bottom:20px;
-  min-height:120px;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-}
+    .pay-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      margin-top: 16px;
+    }
 
-.small-label {
-  font-size:18px;
-}
+    .pay-box input {
+      padding: 8px 12px;
+      font-size: 18px;
+      width: 300px;
+      text-align: center;
+      border: 2px solid var(--blue);
+    }
 
-.balance {
-  font-size:36px;
-  font-weight:700;
-}
+    .pay-box button {
+      padding: 10px 20px;
+      font-size: 18px;
+      cursor: pointer;
+      background: var(--blue);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+    }
 
-.balance .unit {
-  font-size:20px;
-  margin-left:8px;
-}
+    .pay-box .back-btn {
+      padding: 6px 16px;
+      font-size: 16px;
+      cursor: pointer;
+      background: #cce6ff;
+      color: var(--blue-dark);
+      border: none;
+      border-radius: 6px;
+      margin-top: 5px;
+    }
 
-.pay-box {
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:12px;
-  margin-top:16px;
-}
+    .mascot-area {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      position: relative;
+    }
 
-.pay-box input {
-  padding:8px 12px;
-  font-size:18px;
-  width:200px;
-  text-align:center;
-  border: 2px solid #0aa0ff;
-}
+    .mascot {
+      width: 150px;
+    }
 
-.pay-box button {
-  padding:10px 20px;
-  font-size:18px;
-  cursor:pointer;
-  background:#0aa0ff;
-  color:#fff;
-  border:none;
-  border-radius:8px;
-}
+    .balloon3-right-btm {
+      position: absolute;
+      top: 20px;
+      left: 160px;
+      display: inline-block;
+      padding: 15px;
+      width: 200px;
+      line-height: 20px;
+      text-align: center;
+      color: #fff;
+      font-size: 20px;
+      font-weight: bold;
+      background: var(--blue-dark);
+      border-radius: 50%;
+      box-sizing: border-box;
+    }
 
-.pay-box .back-btn {
-  padding: 6px 16px;
-  font-size: 16px;
-  cursor: pointer;
-  background: #cce6ff;
-  color: #008edd;
-  border: none;
-  border-radius: 6px;
-  margin-top: 5px;
-}
-</style>
+    .balloon3-right-btm:before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: -25px;
+      margin-top: -15px;
+      border: 15px solid transparent;
+      border-right: 15px solid var(--blue-dark);
+    }
+  </style>
 </head>
 <body>
-<div class="frame">
-  <div class="brand">やまPay</div>
-  <div id="welcome" class="welcome">ようこそ<span id="username"></span>さん</div>
+  <div class="frame">
+    <div class="brand">やまPay</div>
+    <div id="welcome" class="welcome">ようこそ<span id="username"></span>さん</div>
 
-  <div class="balance-wrap">
-    <div class="small-label">やま残高</div>
-    <div class="balance" id="balance">0<span class="unit">やま</span></div>
-  </div>
-
-  <div class="pay-box">
-    <input type="number" id="payAmount" placeholder="支払うやま">
-    <button id="btnPay">支払う</button>
-    <button id="btnBack" type="button" class="back-btn">戻る</button>
-  </div>
-  
-  <div class="mascot-area">
-    <img id="mascotImg" class="mascot" src="yama_pay.png" alt="やまのマスコット" />
-    <div class="balloon3-right-btm">
-      <p id="balloonMsg">今日はパーっと<br>いっちゃう？</p>
+    <div class="balance-wrap">
+      <div class="small-label">やま残高</div>
+      <div class="balance" id="balance">0<span class="unit">やま</span></div>
     </div>
+
+    <div class="pay-box">
+      <input type="number" id="payAmount" placeholder="支払うやま">
+      <button id="btnPay">支払う</button>
+      <button id="btnBack" type="button" class="back-btn">戻る</button>
+    </div>
+    
+    <div class="mascot-area">
+      <img id="mascotImg" class="mascot" src="yama_pay.png" alt="やまのマスコット" />
+      <div class="balloon3-right-btm">
+        <p id="balloonMsg">今日はパーっと<br>いっちゃう？</p>
+      </div>
+    </div>
+
+    <!-- 音声ファイル -->
+    <audio id="paySound" src="やまペイ.mp3" preload="auto"></audio>
+    <audio id="failSound1" src="残高不足です.mp3" preload="auto"></audio>
+    <audio id="failSound2" src="あなたの残高.mp3" preload="auto"></audio>
+    <audio id="failSound3" src="なんすか.mp3" preload="auto"></audio>
   </div>
 
-  <!-- 音声ファイル -->
-  <audio id="paySound" src="やまペイ.mp3" preload="auto"></audio>
-  <audio id="failSound" src="残高不足です.mp3" preload="auto"></audio>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const username = params.get("user");
+    document.getElementById("username").textContent = username;
 
-</div>
+    const balanceEl = document.getElementById("balance");
+    const inputEl = document.getElementById("payAmount"); 
+    const btnPay = document.getElementById("btnPay");     
+    const btnBack = document.getElementById("btnBack"); 
+    const mascot = document.getElementById("mascotImg");
+    const balloon = document.getElementById("balloonMsg");
 
-<script>
-const params = new URLSearchParams(window.location.search);
-const username = params.get("user");
-document.getElementById("username").textContent = username;
+    const messages = [
+      "やまを払ってお菓子をゲット！",
+      "何やま支払いする？",
+      "無理のないお支払いを！"
+    ];
 
-const balanceEl = document.getElementById("balance");
-const inputEl = document.getElementById("payAmount"); 
-const btnPay = document.getElementById("btnPay");     
-const btnBack = document.getElementById("btnBack"); 
-const mascot = document.getElementById("mascotImg");
-const balloon = document.getElementById("balloonMsg");
+    const failMessages = [
+      "残高が足りません！",
+      "もう少しやまが必要です！",
+      "お支払いできません…"
+    ];
 
-const messages = [
- "やまを払ってお菓子をゲット！",
- "何やま支払いする？",
- "無理のないお支払いを！"
-];
+    // 残高不足用の音声リスト
+    const failSounds = [
+      document.getElementById("failSound1"),
+      document.getElementById("failSound2"),
+      document.getElementById("failSound3")
+    ];
 
-const failMessages = [
- "残高が足りません！",
- "もう少しやまが必要です！",
- "お支払いできません…"
-];
-
-function getRandomMessage(list) {
- return list[Math.floor(Math.random() * list.length)];
-}
-
-// 残高取得
-async function fetchBalance() {
-  try {
-    const res = await fetch(`https://brown-direction-remix-mary.trycloudflare.com/api/wallets/${username}/balance`);
-    if(!res.ok) throw new Error(res.status);
-    const data = await res.json();
-    balanceEl.innerHTML = Number(data.balance).toLocaleString() + '<span class="unit">やま</span>';
-  } catch(err) {
-    console.error(err);
-    balanceEl.textContent = "取得できません";
-  }
-}
-fetchBalance();
-
-btnBack.addEventListener("click", () => {
-  window.location.href = `yamapay_ver3.html?user=${encodeURIComponent(username)}`;
-});
-
-// 支払い処理
-btnPay.addEventListener("click", async () => {
-  const amount = Number(inputEl.value);
-  if (!amount || amount <= 0) { alert("正しい金額を入力してください"); return; }
-
-  try {
-    const res = await fetch(`https://brown-direction-remix-mary.trycloudflare.com/api/wallets/${username}/use`, {
-      method:"POST",
-      headers: {"Content-Type":"application/json"},
-      body: JSON.stringify({amount:amount, description:"支払い"})
-    });
-    // if(!res.ok) throw new Error(res.status);
-    const data = await res.json();
-
-    const paySound = document.getElementById("paySound");
-    const failSound = document.getElementById("failSound");
-
-    if(data.detail !== "Insufficient balance"){
-      // 支払い成功
-      paySound.currentTime = 0;
-      paySound.play();
-      alert(`${amount}やまを支払いました`);
-      balanceEl.innerHTML = Number(data.balanceAfter).toLocaleString() + '<span class="unit">やま</span>';
-      inputEl.value = ""; 
-      mascot.src = "yama_pay.png"; // 通常画像
-      balloon.innerHTML = getRandomMessage(messages);
-    } else {
-      // 残高不足
-      failSound.currentTime = 0;
-      failSound.play();
-      alert("残高不足です");
-      mascot.src = "pay_sad.png"; // 悲しい画像
-      balloon.innerHTML = getRandomMessage(failMessages);
+    function getRandomMessage(list) {
+      return list[Math.floor(Math.random() * list.length)];
     }
-  } catch(err) {
-    console.error(err);
-    alert("支払いに失敗しました");
-  }
-});
 
-// 初回吹き出し
-document.addEventListener("DOMContentLoaded", () => {
-  balloon.innerHTML = getRandomMessage(messages);
-});
+    //残高不足の時の音声決定
+    function playRandomFailSound() {
+      const sound = failSounds[Math.floor(Math.random() * failSounds.length)];
+      sound.currentTime = 0;
+      sound.play();
+    }
 
-// Enterキーでも支払い可能に
-inputEl.addEventListener("keydown", e => {
-  if(e.key === "Enter") btnPay.click();
-});
-</script>
+    // 残高取得
+    async function fetchBalance() {
+      try {
+        const res = await fetch(`https://brown-direction-remix-mary.trycloudflare.com/api/wallets/${username}/balance`);
+        if (!res.ok) throw new Error(res.status);
+        const data = await res.json();
+        balanceEl.innerHTML = Number(data.balance).toLocaleString() + '<span class="unit">やま</span>';
+      } catch (err) {
+        console.error(err);
+        balanceEl.textContent = "取得できません";
+      }
+    }
+    fetchBalance();
+
+    // 戻るボタン
+    btnBack.addEventListener("click", () => {
+      window.location.href = `yamapay_ver3.html?user=${encodeURIComponent(username)}`;
+    });
+
+    // 支払い処理
+    btnPay.addEventListener("click", async () => {
+      const amount = Number(inputEl.value);
+      if (!amount || amount <= 0) {
+        alert("正しい金額を入力してください");
+        return;
+      }
+
+      try {
+        const res = await fetch(`https://brown-direction-remix-mary.trycloudflare.com/api/wallets/${username}/use`, {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({amount: amount, description: "支払い"})
+        });
+        const data = await res.json();
+
+        const paySound = document.getElementById("paySound");
+        const failSound = document.getElementById("failSound");
+
+        if (data.detail !== "Insufficient balance") {
+          // 支払い成功
+          paySound.currentTime = 0;
+          paySound.play();
+          alert(`${amount}やまを支払いました`);
+          balanceEl.innerHTML = Number(data.balanceAfter).toLocaleString() + '<span class="unit">やま</span>';
+          inputEl.value = ""; 
+          mascot.src = "yama_pay.png"; // 通常画像
+          balloon.innerHTML = getRandomMessage(messages);
+        } else {
+          // 残高不足
+          playRandomFailSound();
+          alert("残高不足です");
+          mascot.src = "pay_sad.png"; // 悲しい画像
+          balloon.innerHTML = getRandomMessage(failMessages);
+        }
+      } catch (err) {
+        console.error(err);
+        alert("支払いに失敗しました");
+      }
+    });
+
+    // 初回吹き出し
+    document.addEventListener("DOMContentLoaded", () => {
+      balloon.innerHTML = getRandomMessage(messages);
+    });
+
+    // Enterキーでも支払い可能
+    inputEl.addEventListener("keydown", e => {
+      if (e.key === "Enter") btnPay.click();
+    });
+  </script>
 </body>
 </html>
