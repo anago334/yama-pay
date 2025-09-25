@@ -64,6 +64,18 @@
       width: 100%;
       box-sizing: border-box;
     }
+    
+   /* ハードモード切替ゾーン（右上50px四方） */
+  .secret-zone {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 50px;
+    height: 50px;
+    opacity: 0; /* 透明にして見えない */
+    z-index: 999;
+  }
+  
   </style>
 </head>
 <body>
@@ -73,9 +85,15 @@
    <button id="btnLogin">ログイン</button>
  </div>
 
+  <!-- ハードモード用の透明タップゾーン -->
+  <div id="secretZone" class="secret-zone"></div>
+
   <script>
+      let tapCount = 0;
+      let isSecret = false;
+      const secretZone = document.getElementById("secretZone");
       const usernameInput = document.getElementById("username");
-  const btnLogin = document.getElementById("btnLogin");
+      const btnLogin = document.getElementById("btnLogin");
 
   function doLogin() {
     const username = usernameInput.value.trim();
@@ -85,6 +103,26 @@
     }
     window.location.href = "yamapay_ver3.html?user=" + encodeURIComponent(username);
   }
+  
+  // 秘密のタップカウント
+  secretZone.addEventListener("click", () => {
+  tapCount++;
+
+  if (tapCount === 5) {
+    alert("あと2回でハードモードに入れます…！");
+  }
+
+  if (tapCount === 7) {
+    isSecret = true;
+    alert("ハードモード突入！");
+    localStorage.setItem("yamapaySecretMode", "true"); // ローカルに保存
+  }
+});
+
+  // ログインしたら裏モードは封印
+  btnLogin.addEventListener("click", () => {
+    secretZone.remove(); // タップゾーンを削除
+  });
 
   btnLogin.addEventListener("click", doLogin);
 

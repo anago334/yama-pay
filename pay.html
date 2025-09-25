@@ -174,9 +174,15 @@
     <audio id="failSound1" src="残高不足です.mp3" preload="auto"></audio>
     <audio id="failSound2" src="あなたの残高.mp3" preload="auto"></audio>
     <audio id="failSound3" src="なんすか.mp3" preload="auto"></audio>
+    <audio id="failSound4" src="この豚.mp3" preload="auto"></audio>
+    <audio id="failSound5" src="あのさあ.mp3" preload="auto"></audio>
+    <audio id="failSound6" src="そんなんだから.mp3" preload="auto"></audio>
   </div>
 
   <script>
+    // ハードモード判定
+    const isSecretMode = localStorage.getItem("yamapaySecretMode") === "true";
+
     const params = new URLSearchParams(window.location.search);
     const username = params.get("user");
     document.getElementById("username").textContent = username;
@@ -188,24 +194,48 @@
     const mascot = document.getElementById("mascotImg");
     const balloon = document.getElementById("balloonMsg");
 
-    const messages = [
+    let messages = [
       "やまを払ってお菓子をゲット！",
       "何やま支払いする？",
       "無理のないお支払いを！"
     ];
 
-    const failMessages = [
+    let failMessages = [
       "残高が足りません！",
       "もう少しやまが必要です！",
       "お支払いできません…"
     ];
 
     // 残高不足用の音声リスト
-    const failSounds = [
+    let failSounds = [
       document.getElementById("failSound1"),
       document.getElementById("failSound2"),
       document.getElementById("failSound3")
     ];
+
+    if (isSecretMode) {
+    // bodyクラス切り替え
+    // document.body.classList.add("hard");
+
+    // マスコット画像を変更
+    const mascotImg = document.querySelector(".mascot");
+    mascotImg.src = "pay_hardMode.png";
+
+    // 吹き出しメッセージを差し替え
+    messages = [
+      "ハードモードだよ",
+      "厳しいこと言わるから気を付けて",
+      "注意！ハードモードです",
+      "こんなの見つけるなんて暇なの？"
+    ];
+
+    // 残高不足用の音声リスト差し替え
+      failSounds = [
+      document.getElementById("failSound4"),
+      document.getElementById("failSound5"),
+      document.getElementById("failSound6")
+    ];
+  }
 
     function getRandomMessage(list) {
       return list[Math.floor(Math.random() * list.length)];
@@ -263,7 +293,7 @@
           alert(`${amount}やまを支払いました`);
           balanceEl.innerHTML = Number(data.balanceAfter).toLocaleString() + '<span class="unit">やま</span>';
           inputEl.value = ""; 
-          mascot.src = "yama_pay.png"; // 通常画像
+          mascot.src = isSecretMode ? "pay_hardMode.png" : "yama_pay.png";
           balloon.innerHTML = getRandomMessage(messages);
         } else {
           // 残高不足

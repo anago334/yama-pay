@@ -167,6 +167,14 @@
       border: 15px solid transparent;
       border-right: 15px solid #008edd;
     }
+    
+    body.hard {
+      --blue: #ff2222;
+      --blue-dark: #cc0000;
+      --bg: #111;
+      --card: #330000;
+    }
+
   </style>
 </head>
 <body>
@@ -198,6 +206,35 @@
   </div>
 
   <script>
+    // ハードモード判定
+    const isSecretMode = localStorage.getItem("yamapaySecretMode") === "true";
+   
+    // 吹き出し用メッセージのリスト
+    let messages = [
+     "今日はパーっといっちゃう？",
+     "今日も一日おつかれさま",
+     "やまPayはいつでも貴方のそばに",
+     "一息入れちゃう？"
+    ];
+
+   if (isSecretMode) {
+    // bodyクラス切り替え
+    // document.body.classList.add("hard");
+
+    // マスコット画像を変更
+    const mascotImg = document.querySelector(".mascot");
+    mascotImg.src = "yama_pay_hard.png";
+
+    // 吹き出しメッセージを差し替え
+    messages = [
+      "ハードモードだよ",
+      "厳しいこと言わるから気を付けて",
+      "注意！ハードモードです",
+      "こんなの見つけるなんて暇なの？"
+    ];
+    
+    localStorage.setItem("yamapaySecretMode", "true"); // ローカルに保存
+  }
     // URLパラメータからユーザー名を取得
     function getUsernameFromURL() {
       const params = new URLSearchParams(window.location.search);
@@ -240,14 +277,6 @@
         alert("現在開発中です");
       });
     });
-    
-    // 吹き出し用メッセージのリスト
-    const messages = [
-     "今日はパーっといっちゃう？",
-     "今日も一日おつかれさま",
-     "やまPayはいつでも貴方のそばに",
-     "一息入れちゃう？"
-    ];
 
     // ランダムに1つ選ぶ関数
     function getRandomMessage() {
