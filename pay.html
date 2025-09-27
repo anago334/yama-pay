@@ -170,13 +170,18 @@
     </div>
 
     <!-- 音声ファイル -->
-    <audio id="paySound" src="やまペイ.mp3" preload="auto"></audio>
-    <audio id="failSound1" src="残高不足です.mp3" preload="auto"></audio>
-    <audio id="failSound2" src="あなたの残高.mp3" preload="auto"></audio>
-    <audio id="failSound3" src="なんすか.mp3" preload="auto"></audio>
-    <audio id="failSound4" src="この豚.mp3" preload="auto"></audio>
-    <audio id="failSound5" src="あのさあ.mp3" preload="auto"></audio>
-    <audio id="failSound6" src="そんなんだから.mp3" preload="auto"></audio>
+    <audio id="paySound" src="やまペイver1.mp3" preload="auto"></audio>
+    <audio id="paySound2" src="もったいねーver1.mp3" preload="auto"></audio>
+    <audio id="failSound1" src="ちょっと足りなかったねver1.mp3" preload="auto"></audio>
+    <audio id="failSound2" src="俺も残高見ておくべきだったねver3.mp3" preload="auto"></audio>
+    <audio id="failSound3" src="お金に困ってるなら相談乗るよver1.mp3" preload="auto"></audio>
+    <audio id="failSound4" src="決済するって言ったのお前ver1.mp3" preload="auto"></audio>
+    <audio id="failSound5" src="そんな残高でver1.mp3" preload="auto"></audio>
+    <audio id="failSound6" src="情けなver1.mp3" preload="auto"></audio>
+    <audio id="failSound7" src="ダッッサver1.mp3" preload="auto"></audio>
+    <audio id="failSound8" src="この貧乏人ver1.mp3" preload="auto"></audio>
+    <audio id="failSound9" src="限界？ver1.mp3" preload="auto"></audio>
+    <audio id="failSound10" src="自分で決めたんならver1.mp3" preload="auto"></audio>
   </div>
 
   <script>
@@ -213,9 +218,15 @@
       document.getElementById("failSound3")
     ];
 
+    let paySound = document.getElementById("paySound");
+
+
     if (isSecretMode) {
     // bodyクラス切り替え
     // document.body.classList.add("hard");
+    
+      // 決済の音声を差し替え
+      paySound = document.getElementById("paySound2");
 
     // マスコット画像を変更
     const mascotImg = document.querySelector(".mascot");
@@ -233,7 +244,11 @@
       failSounds = [
       document.getElementById("failSound4"),
       document.getElementById("failSound5"),
-      document.getElementById("failSound6")
+      document.getElementById("failSound6"),
+      document.getElementById("failSound7"),
+      document.getElementById("failSound8"),
+      document.getElementById("failSound9"),
+      document.getElementById("failSound10")
     ];
   }
 
@@ -283,7 +298,6 @@
         });
         const data = await res.json();
 
-        const paySound = document.getElementById("paySound");
         const failSound = document.getElementById("failSound");
 
         if (data.detail !== "Insufficient balance") {
