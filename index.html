@@ -95,6 +95,10 @@
       const usernameInput = document.getElementById("username");
       const btnLogin = document.getElementById("btnLogin");
 
+  function initialize() {
+  localStorage.setItem("yamapaySecretMode", "false"); // 初期化
+  }
+
   function doLogin() {
     const username = usernameInput.value.trim();
     if (username === "") {
@@ -103,6 +107,8 @@
     }
     window.location.href = "yamapay_ver3.html?user=" + encodeURIComponent(username);
   }
+  
+  initialize();
   
   // 秘密のタップカウント
   secretZone.addEventListener("click", () => {
