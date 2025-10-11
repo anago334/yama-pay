@@ -244,7 +244,7 @@
     // APIから残高を取得
     async function fetchBalance(username) {
       try {
-        const apiUrl = `https://brown-direction-remix-mary.trycloudflare.com/api/wallets/${username}/balance`;
+        const apiUrl = `https://yamapay.seafood-avocado.com/api/wallets/${username}/balance`;
         const response = await fetch(apiUrl);
         if (!response.ok) throw new Error("HTTPエラー: " + response.status);
         const data = await response.json();

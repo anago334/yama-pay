@@ -266,7 +266,7 @@
     // 残高取得
     async function fetchBalance() {
       try {
-        const res = await fetch(`https://brown-direction-remix-mary.trycloudflare.com/api/wallets/${username}/balance`);
+        const res = await fetch(`https://yamapay.seafood-avocado.com/api/wallets/${username}/balance`);
         if (!res.ok) throw new Error(res.status);
         const data = await res.json();
         balanceEl.innerHTML = Number(data.balance).toLocaleString() + '<span class="unit">やま</span>';
@@ -291,7 +291,7 @@
       }
 
       try {
-        const res = await fetch(`https://brown-direction-remix-mary.trycloudflare.com/api/wallets/${username}/use`, {
+        const res = await fetch(`https://yamapay.seafood-avocado.com/api/wallets/${username}/use`, {
           method: "POST",
           headers: {"Content-Type": "application/json"},
           body: JSON.stringify({amount: amount, description: "支払い"})
